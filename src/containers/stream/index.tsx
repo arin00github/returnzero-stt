@@ -1,7 +1,7 @@
 // import { socket } from "@/socket";
 import { TalkBox } from "@/components/stream";
 import { StreamResponseItem } from "@/interface/stt.interface";
-import { Button, Container, Flex, Heading } from "@chakra-ui/react";
+import { Button, Container, Flex, Heading, Tag } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
 
 import SocketIOClient, { Socket } from "socket.io-client";
@@ -11,7 +11,7 @@ const StreamContainer = () => {
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
 
   // const [isSpeaking, setIsSpeaking] = useState<boolean>(false);
-  const [transcript, setTranscript] = useState<StreamResponseItem[]>([]);
+  const [transcripts, setTranscript] = useState<StreamResponseItem[]>([]);
   const [isRecording, setIsRecording] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -43,8 +43,8 @@ const StreamContainer = () => {
     });
 
     socket.on("transcript", (newText: StreamResponseItem) => {
-      console.log("Socket Transcript", transcript);
-      setTranscript(transcript.concat([newText]));
+      console.log("Socket Transcript", transcripts);
+      setTranscript(transcripts.concat([newText]));
     });
     socketRef.current = socket;
 
@@ -157,21 +157,19 @@ const StreamContainer = () => {
   // }, []);
 
   return (
-    <Container>
-      <Heading>스트리밍 STT</Heading>
-      <Flex marginBottom={"40px"}>
-        <Button onClick={handleStartStop}>{isRecording ? "Stop Recording" : "Start Recording"}</Button>
+    <Container w="70%" maxW="1800px">
+      <Flex alignItems={"baseline"} gap="12px">
+        <Heading marginTop={"40px"}>스트리밍 STT</Heading>
+        <Tag colorScheme={isConnected ? "green" : "red"} h="32px">
+          Status: {isConnected ? "connected" : "disconnected"}
+        </Tag>
       </Flex>
-      <Flex>
-        <p>
-          {transcript.map((script, idx) => {
-            return <div key={`${script.start_at}_${idx}_${script.seq}`}>{script.alternatives[0].text}</div>;
-          })}
-        </p>
+      <Flex my={"40px"}>
+        <Button colorScheme="blue" onClick={handleStartStop}>
+          {isRecording ? "Stop Recording" : "Start Recording"}
+        </Button>
       </Flex>
-      {/* <p>status : {isSpeaking ? "speaking" : "no speak"}</p> */}
-      <p>Status: {isConnected ? "connected" : "disconnected"}</p>
-      <TalkBox />
+      <TalkBox transcripts={transcripts} />
     </Container>
   );
 };

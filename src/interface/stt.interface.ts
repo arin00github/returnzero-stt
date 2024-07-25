@@ -11,3 +11,19 @@ export interface StreamResponseItem {
     }
   ];
 }
+
+export type Utterances = {
+  duration: number;
+  msg: string;
+  spk: number;
+  spk_type: string;
+  start_at: number;
+};
+export interface NormalGetDetailResult {
+  id: string;
+  results?: {
+    utterances: Utterances[];
+    verified: boolean;
+  };
+  status: string;
+}

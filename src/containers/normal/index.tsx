@@ -1,12 +1,14 @@
 "use client";
 
 import { useLocalStorage } from "@/hooks";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
-import { Container } from "@chakra-ui/react";
+import { Container, Flex } from "@chakra-ui/react";
 import { CheckTranscribe, RegisterFile } from "@/components/normal";
 
 const NormalContainer = () => {
+  const [registerdId, setRegisteredId] = useState<string | undefined>();
+
   const { getLocalStorage, setLocalStorage } = useLocalStorage();
 
   const loadDataToken = async () => {
@@ -27,9 +29,15 @@ const NormalContainer = () => {
   }, []);
 
   return (
-    <Container>
-      <RegisterFile />
-      <CheckTranscribe />
+    <Container w="76%" maxW="1800px">
+      <Flex gap="20px">
+        <RegisterFile
+          handleSubmitRegisteredId={(newId) => {
+            setRegisteredId(newId);
+          }}
+        />
+        <CheckTranscribe registerdId={registerdId} />
+      </Flex>
     </Container>
   );
 };

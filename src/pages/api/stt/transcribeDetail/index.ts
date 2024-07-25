@@ -16,20 +16,20 @@ async function postControl(req: NextApiRequest, res: NextApiResponse) {
     console.log("response", response);
     if (response.status === 200) {
       const data = await response.json();
-      return Response.json({ success: true, result: data });
+      return res.status(200).json({ success: true, result: data });
     }
   } catch (err) {
     console.error(err);
-    return Response.json({ success: false });
+    return res.status(500).json({ message: "api fail" });
   }
 }
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   console.log("### handler req", req.method);
   if (req.method === "POST") {
-    await postControl(req, res);
+    return postControl(req, res);
   }
-  return res.status(501).json({ messsage: "handler error" });
+  return res.status(101).json({ messsage: "handler error" });
 };
 
 export default handler;

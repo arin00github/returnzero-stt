@@ -1,5 +1,4 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { NextRequest, NextResponse } from "next/server";
 
 const getAuthorization = async () => {
   try {
@@ -50,9 +49,9 @@ async function postControl(req: NextApiRequest, res: NextApiResponse) {
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   console.log("### handler req", req.method);
   if (req.method === "POST") {
-    return await postControl(req, res);
+    return postControl(req, res);
   }
-  return res.status(501).json({ messsage: "handler error" });
+  return res.status(101).json({ messsage: "handler error" });
 };
 
 export default handler;

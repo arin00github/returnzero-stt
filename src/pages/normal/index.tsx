@@ -1,7 +1,7 @@
 import NormalContainer from "@/containers/normal";
 
 const NormalPage = () => {
-  <NormalContainer />;
+  return <NormalContainer />;
 };
 
-export default NormalContainer;
+export default NormalPage;
